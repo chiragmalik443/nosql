@@ -1,0 +1,31 @@
+{{#if user}}
+<div>
+    <h3>Welcome {{user.name}}</h3>
+</div>
+<button>Orders</button>
+<button>Signout</button>
+{{else}}
+<div>
+    <button onclick="signIn()">Sign In</button>
+    <button onclick="signUp()">Sign Up</button>
+</div>
+{{/if}}
+<div>
+    <h1>Products</h1>
+    {{#each products}}
+    <div>
+        <p>Name:{{name}}</p>
+        <p>Price:{{price}}</p>
+        <button>Buy</button>
+    </div>
+    {{/each}}
+</div>
+<script>
+    function signIn() {
+        window.location = "/signin"
+    }
+
+    function signUp() {
+        window.location = "/signup"
+    }
+</script>

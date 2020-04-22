@@ -1,0 +1,60 @@
+<div>
+    {{#if isUser}}
+    <h2>Sign in as user</h2>
+    {{else}}
+    <h2>Sign in as seller</h2>
+    {{/if}}
+</div>
+
+<div>
+    Email: <input type="text" name="email" id="email">
+</div>
+<div>
+    Password: <input type="text" name="password" id="password">
+</div>
+<p style="color:red" id="error"></p>
+<div>
+    <button onclick="signIn({{isUser}})">Sign In</button>
+    <!--<input type="submit" value="Login">-->
+</div>
+<script>
+    function signIn(isUser) {
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+        if (email === undefined || email === null || email === "") {
+            document.getElementById("error").innerText = "Email id cannot be empty"
+            return
+        }
+
+        if (password === undefined || password === null || password === "") {
+            document.getElementById("error").innerText = "Password cannot be empty"
+            return
+        }
+
+        var xmlHttpRequest = new XMLHttpRequest()
+        xmlHttpRequest.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    document.cookie = "authorization=" + this.getResponseHeader("authorization")
+                    console.log("signin success")
+                    window.location = "/"
+                }
+                else {
+                    console.log("here")
+                    document.getElementById("error").innerText = JSON.parse(this.responseText).message
+                }
+            }
+        }
+        console.log("isUser = " + isUser)
+        if (isUser)
+            xmlHttpRequest.open("POST", "/users/signin", true)
+        else
+            xmlHttpRequest.open("POST", "/sellers/signin", true)
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/json")
+        xmlHttpRequest.send(JSON.stringify({ email: email, password: password }))
+    }
+</script>
+
+<!--<form action="/" method="POST">
+
+</form>-->
